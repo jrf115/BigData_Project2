@@ -132,3 +132,66 @@ print("\nThe MNIST Sequential fully connected model")
 print(Seq_model.summary())
 print("\nThe MNIST Cov2Dnet Model")
 print(Cov_model.summary(), '\n')
+
+
+### 4 ###
+# Create a cov2Dnet model for the CIFAR-10 data set. Create logs for
+# accuracy and loss of training and validation data sets. Save the model in ‘hdf5’
+# format. Name the saved model as ‘cifar-10.h5’. Compare the performance of your
+# model to the Cifar-10 2019 top benchmark of 99.3%.
+print('\n\n\n__CIFAR-10__')
+K.clear_session()
+
+(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+print('x_train shape:', x_train.shape)
+print(x_train.shape[0], 'train samples')
+print(x_test.shape[0], 'test samples')
+print("Num of labels in data:", len(y_train))
+print("The labels...:", y_train)
+print("The test set contains this amount of data:", len(y_test))
+
+# Convert class vectors to binary class matrices.
+y_train = keras.utils.to_categorical(y_train, 10)
+y_test = keras.utils.to_categorical(y_test, 10)
+
+Cov_model = Sequential()
+Cov_model.add(Conv2D(32, (3, 3), input_shape=x_train.shape[1:]))
+Cov_model.add(Activation('relu'))
+
+Cov_model.add(Conv2D(64, (3, 3), activation='relu'))
+Cov_model.add(MaxPooling2D(pool_size=(2, 2)))
+Cov_model.add(Dropout(0.25))
+Cov_model.add(Flatten())
+
+Cov_model.add(Dense(128))
+Cov_model.add(Activation('relu'))
+Cov_model.add(Dropout(0.5))
+
+Cov_model.add(Dense(10))
+Cov_model.add(Activation('softmax'))
+
+# initiate RMSprop optimizer
+opt = keras.optimizers.RMSprop(learning_rate=0.0001, decay=1e-6)
+
+Cov_model.compile(loss='categorical_crossentropy',
+                  optimizer=opt,
+                  metrics=['accuracy'])
+
+c_log_dir="logs/fit/cifar_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+tensorboard_callback = keras.callbacks.TensorBoard(log_dir=c_log_dir, histogram_freq=1)
+
+Cov_history = Cov_model.fit(x_train, y_train,
+                            batch_size=128,
+                            epochs=50,
+                            verbose=2,
+                            validation_data=(x_test, y_test),
+                            callbacks=[tensorboard_callback])
+
+Cov_model.reset_metrics()
+Cov_model.save('Models/cifar-10.h5')
+
+
+#########################################################
+### Display accuracy charts for the first two models. ###
+#########################################################
+
