@@ -21,12 +21,12 @@ import os
 #  Create a Sequential fully connected model. Create logs for accuracy and loss
 #  of training and validation data sets. Save the model in ‘hdf5’ format. Name the saved
 #  model as ‘f_mnist.h5’
-mnist = keras.datasets.mnist
+fashion_mnist = keras.datasets.mnist
 
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
 x_train, x_test = x_train / 255.0, x_test / 255.0
 
-do_Sequential = False
+do_Sequential = True
 if do_Sequential:
     Seq_model = Sequential()
     Seq_model.add(Flatten(input_shape=(28, 28)))
@@ -40,18 +40,18 @@ if do_Sequential:
     tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1)
 
     # Train the model
-    history = Seq_model.fit(x=x_train,
+    Seq_history = Seq_model.fit(x=x_train,
                              y=y_train,
                              epochs=5,
                              validation_data=(x_test, y_test),
                              callbacks=[tensorboard_callback])
 
-    Seq_Dict = history.history
+    Seq_Dict = Seq_history.history
 
-    Seq_acc = history.history['accuracy']
-    Seq_val_acc = history.history['val_accuracy']
-    Seq_loss = history.history['loss']
-    Seq_val_loss = history.history['val_loss']
+    Seq_acc = Seq_history.history['accuracy']
+    Seq_val_acc = Seq_history.history['val_accuracy']
+    Seq_loss = Seq_history.history['loss']
+    Seq_val_loss = Seq_history.history['val_loss']
 
 
     # Save model
