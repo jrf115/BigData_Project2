@@ -11,6 +11,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 import datetime
+import matplotlib.pyplot as plt
 
 # Use Keras to create and compare deep learning models for the MNIST Fashion data set.
 
@@ -154,41 +155,41 @@ print("The test set contains this amount of data:", len(y_test))
 y_train = keras.utils.to_categorical(y_train, 10)
 y_test = keras.utils.to_categorical(y_test, 10)
 
-Cov_model = Sequential()
-Cov_model.add(Conv2D(32, (3, 3), input_shape=x_train.shape[1:]))
-Cov_model.add(Activation('relu'))
+Cov2_model = Sequential()
+Cov2_model.add(Conv2D(32, (3, 3), input_shape=x_train.shape[1:]))
+Cov2_model.add(Activation('relu'))
 
-Cov_model.add(Conv2D(64, (3, 3), activation='relu'))
-Cov_model.add(MaxPooling2D(pool_size=(2, 2)))
-Cov_model.add(Dropout(0.25))
-Cov_model.add(Flatten())
+Cov2_model.add(Conv2D(64, (3, 3), activation='relu'))
+Cov2_model.add(MaxPooling2D(pool_size=(2, 2)))
+Cov2_model.add(Dropout(0.25))
+Cov2_model.add(Flatten())
 
-Cov_model.add(Dense(128))
-Cov_model.add(Activation('relu'))
-Cov_model.add(Dropout(0.5))
+Cov2_model.add(Dense(128))
+Cov2_model.add(Activation('relu'))
+Cov2_model.add(Dropout(0.5))
 
-Cov_model.add(Dense(10))
-Cov_model.add(Activation('softmax'))
+Cov2_model.add(Dense(10))
+Cov2_model.add(Activation('softmax'))
 
 # initiate RMSprop optimizer
 opt = keras.optimizers.RMSprop(learning_rate=0.0001, decay=1e-6)
 
-Cov_model.compile(loss='categorical_crossentropy',
+Cov2_model.compile(loss='categorical_crossentropy',
                   optimizer=opt,
                   metrics=['accuracy'])
 
 c_log_dir="logs/fit/cifar_" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 tensorboard_callback = keras.callbacks.TensorBoard(log_dir=c_log_dir, histogram_freq=1)
 
-Cov_history = Cov_model.fit(x_train, y_train,
+Cov2_history = Cov2_model.fit(x_train, y_train,
                             batch_size=128,
                             epochs=50,
                             verbose=2,
                             validation_data=(x_test, y_test),
                             callbacks=[tensorboard_callback])
 
-Cov_model.reset_metrics()
-Cov_model.save('Models/cifar-10.h5')
+Cov2_model.reset_metrics()
+Cov2_model.save('Models/cifar-10.h5')
 
 
 #########################################################
