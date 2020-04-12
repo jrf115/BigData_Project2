@@ -195,4 +195,30 @@ Cov2_model.save('Models/cifar-10.h5')
 #########################################################
 ### Display accuracy charts for the first two models. ###
 #########################################################
+print("\n\nSequential Fully Connected Model Accuracy: ", Seq_history.history['accuracy'])
+print("Cov2DNet Model Accuracy: ", Seq_history.history['accuracy'])
+seq_epochs = range(1, len(Seq_history.history['accuracy']) + 1)
+plt.figure()
+plt.plot(seq_epochs, Seq_history.history['accuracy'], 'bo', label="Training Acc")
+plt.plot(seq_epochs, Seq_history.history['val_accuracy'], 'b', label="Validation Acc")
+plt.title('Sequential Fully Connected Model: Training and validation accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
 
+print("\n\nCov2DNet Model Accuracy: ", Cov_history.history['accuracy'])
+print("Cov2DNet Model Accuracy: ", Cov_history.history['accuracy'])
+Cov_epochs = range(1, len(Cov_history.history['accuracy']) + 1)
+plt.figure()
+plt.plot(Cov_epochs, Cov_history.history['accuracy'], 'bo', label="Training Acc")
+plt.plot(Cov_epochs, Cov_history.history['val_accuracy'], 'b', label="Validation Acc")
+plt.title('Cov2DNet Model: Training and validation accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.legend()
+plt.show()
+
+# Compare the performance of your cifar model to the 2019 top benchamrk of 99.3%
+print("\n\nAccuracy of my Cifar model: ", Cov2_history.history['accuracy'])
+print("Accuracy of 2019 Top benchmark: ", "99.3%")
